@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#14110F">
+<link rel="icon" href="data:,">
+<title>Клиенты · NOVACODE</title>
+<style>
+:root{
+  --bg:#14110F; --bg2:#1C1815; --card:#221D19; --line:#332B25; --text:#F2ECE6; --muted:#A39588; --dim:#75685D;
+  --gold:#C9A25B; --gold2:#E3C285; --ok:#5FAF7E; --warn:#E0A34A; --bad:#D46A5E; --info:#6FA3D8;
+  --r:16px; --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:400 15px/1.45 var(--font);-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}
+a{color:var(--gold2)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 16px 90px}
+/* login */
+.login{min-height:100svh;display:grid;place-items:center;padding:16px}
+.login form{width:100%;max-width:360px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:26px}
+.login h1{margin:0 0 4px;font-size:22px}.login p{margin:0 0 18px;color:var(--muted);font-size:14px}
+.inp{width:100%;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);padding:0 14px;outline:none}
+.inp:focus{border-color:var(--gold)}
+.chk{display:flex;gap:8px;align-items:center;margin:12px 0 16px;color:var(--muted);font-size:14px}
+.btn{height:46px;border:0;border-radius:12px;background:var(--gold);color:#1a140c;font-weight:700;padding:0 18px;cursor:pointer}
+.btn.ghost{background:var(--bg2);color:var(--text);border:1px solid var(--line)}
+.btn.sm{height:36px;padding:0 12px;font-size:13.5px}
+.err{color:var(--bad);font-size:14px;margin-top:10px;min-height:20px}
+/* header */
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.top h1{margin:0;font-size:20px;flex:1;min-width:150px}.top h1 b{color:var(--gold)}
+.upd{color:var(--dim);font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.kpi small{display:block;color:var(--muted);font-size:12.5px}.kpi b{font-size:22px;font-variant-numeric:tabular-nums}
+.kpi i{font-style:normal;color:var(--dim);font-size:12.5px;margin-left:4px}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:transparent;cursor:pointer;font-weight:600;font-size:14px}
+.tab.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+.tab em{font-style:normal;margin-left:6px;padding:1px 7px;border-radius:9px;background:var(--bad);color:#fff;font-size:12px}
+/* sections & cards */
+.sec{margin-bottom:20px}.sec h2{font-size:15px;margin:0 0 8px;display:flex;gap:8px;align-items:center}
+.sec h2 span{color:var(--dim);font-weight:500}
+.empty{color:var(--dim);font-size:14px;padding:6px 2px}
+.list{display:grid;gap:8px}
+.lead{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;cursor:pointer;display:grid;gap:4px;text-align:left;width:100%}
+.lead:hover{border-color:#4a3f36}
+.lead .r1{display:flex;gap:8px;align-items:baseline;justify-content:space-between}
+.lead .t{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lead .m{color:var(--muted);font-size:13px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:700;background:var(--bg2);border:1px solid var(--line);white-space:nowrap}
+.p-found,.p-draft{color:var(--muted)}.p-queued{color:var(--info)}.p-sent{color:var(--text)}.p-read{color:var(--warn)}
+.p-replied{color:var(--ok)}.p-demo{color:var(--gold2)}.p-paid{background:var(--ok);color:#0d1f14;border-color:var(--ok)}
+.p-rejected,.p-skipped{color:var(--bad)}.p-nocontact{color:var(--dim)}
+.hot{color:var(--bad);font-weight:700}
+/* board */
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);gap:10px;overflow-x:auto;padding-bottom:8px}
+.col{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:10px;min-height:120px}
+.col h3{margin:0 0 8px;font-size:13.5px;display:flex;justify-content:space-between;color:var(--muted)}
+.col .lead{padding:10px}
+/* filters */
+.filters{display:grid;grid-template-columns:2fr repeat(5,1fr);gap:8px;margin-bottom:12px}
+.filters .inp{height:40px;font-size:14px}
+select.inp{padding:0 8px}
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100%);background:var(--bg);border-left:1px solid var(--line);z-index:21;transform:translateX(100%);transition:transform .25s ease;overflow-y:auto;padding:16px 16px 40px}
+.drawer.on{transform:none}
+.drawer h2{margin:4px 0 2px;font-size:20px}
+.drawer .close{float:right}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;margin:12px 0;font-size:14px}
+.grid2 span{color:var(--muted)}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0;font-size:14px;white-space:pre-wrap}
+.box small{display:block;color:var(--muted);margin-bottom:4px;white-space:normal}
+.chat{display:grid;gap:6px;margin:10px 0}
+.msg{max-width:85%;padding:8px 11px;border-radius:14px;font-size:14px;white-space:pre-wrap;word-break:break-word}
+.msg.out{justify-self:end;background:#3a2f22;border-bottom-right-radius:4px}
+.msg.in{justify-self:start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg time{display:block;color:var(--dim);font-size:11.5px;margin-top:3px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.acts a{text-decoration:none}
+/* analytics */
+.bars{display:grid;gap:6px}
+.bar{display:grid;grid-template-columns:120px 1fr 44px;gap:8px;align-items:center;font-size:13.5px}
+.bar div{height:12px;border-radius:6px;background:var(--bg2);overflow:hidden}.bar div i{display:block;height:100%;background:var(--gold)}
+.bar b{text-align:right;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:7px 6px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-weight:600}
+.learn{white-space:pre-wrap;color:var(--muted);font-size:14px}
+@media (max-width:760px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .filters{grid-template-columns:1fr 1fr}
+  .filters .q{grid-column:1/-1}
+  .grid2{grid-template-columns:1fr}
+  .bar{grid-template-columns:96px 1fr 36px}
+}
+</style>
+</head>
+<body>
+<div id="login" class="login" hidden>
+  <form id="lf">
+    <h1>Клиенты · NOVACODE</h1>
+    <p>Данные зашифрованы. Введите пароль из бота.</p>
+    <input class="inp" id="pw" type="password" autocomplete="current-password" placeholder="Пароль" required>
+    <label class="chk"><input type="checkbox" id="remember" checked> Запомнить на этом устройстве</label>
+    <button class="btn" style="width:100%" type="submit">Открыть</button>
+    <div class="err" id="lerr"></div>
+  </form>
+</div>
+
+<div id="app" class="wrap" hidden>
+  <div class="top">
+    <h1><b>NOVACODE</b> · клиенты</h1>
+    <span class="upd" id="upd"></span>
+    <button class="btn ghost sm" id="refresh" type="button">Обновить</button>
+    <button class="btn ghost sm" id="logout" type="button">Выйти</button>
+  </div>
+  <div class="kpis" id="kpis"></div>
+  <nav class="tabs" id="tabs"></nav>
+  <main id="view"></main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Карточка магазина"></aside>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const num = n => (n ?? 0).toLocaleString('ru-RU');
+const KEY = 'nc_panel_pw';
+let CFG = null, D = null, PW = null, TAB = 'today', BYID = {};
+const F = { q:'', niche:'', st:'', act:'', contact:'', sort:'prio' };
+
+function ago(ts){ if (!ts) return '—'; const s = Date.now()/1000 - ts;
+  if (s < 3600) return Math.max(1, Math.round(s/60)) + ' мин назад';
+  if (s < 86400) return Math.round(s/3600) + ' ч назад';
+  return Math.round(s/86400) + ' дн. назад'; }
+function when(ts){ if (!ts) return '—'; const d = new Date(ts*1000);
+  return d.toLocaleString('ru-RU', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}); }
+
+/* ---------- crypto ---------- */
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function decrypt(blob, pw){
+  const d = JSON.parse(blob);
+  const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({name:'PBKDF2', salt:b64(d.salt), iterations:d.iter, hash:'SHA-256'},
+    base, {name:'AES-GCM', length:256}, false, ['decrypt']);
+  const raw = await crypto.subtle.decrypt({name:'AES-GCM', iv:b64(d.iv)}, key, b64(d.ct));
+  const stream = new Blob([raw]).stream().pipeThrough(new DecompressionStream('gzip'));
+  return JSON.parse(await new Response(stream).text());
+}
+async function fetchBlob(){
+  if (!CFG) CFG = await (await fetch('config.json', {cache:'no-cache'})).json();
+  try {  // API отдаёт свежий файл сразу (лимит 60 запросов в час — хватает)
+    const r = await fetch(`https://api.github.com/repos/${CFG.repo}/contents/panel.enc?ref=data`,
+      {cache:'no-cache', headers:{Accept:'application/vnd.github.raw'}});
+    if (r.ok) return await r.text();
+  } catch (e) {}
+  return await (await fetch(`https://raw.githubusercontent.com/${CFG.repo}/data/panel.enc`, {cache:'no-cache'})).text();
+}
+async function load(pw){
+  const blob = await fetchBlob();
+  D = await decrypt(blob, pw);
+  BYID = Object.fromEntries(D.leads.map(l => [l.id, l]));
+  render();
+}
+
+/* ---------- login ---------- */
+async function tryLogin(pw, remember){
+  $('#lerr').textContent = '';
+  try { await load(pw); PW = pw;
+    if (remember) try { localStorage.setItem(KEY, pw); } catch (e) {}
+    $('#login').hidden = true; $('#app').hidden = false;
+  } catch (e) {
+    $('#login').hidden = false; $('#app').hidden = true;
+    $('#lerr').textContent = e.name === 'OperationError' ? 'Неверный пароль' : 'Не удалось загрузить данные. Проверьте интернет.';
+  }
+}
+$('#lf').addEventListener('submit', e => { e.preventDefault(); tryLogin($('#pw').value, $('#remember').checked); });
+$('#logout').addEventListener('click', () => { try { localStorage.removeItem(KEY); } catch (e) {} location.reload(); });
+$('#refresh').addEventListener('click', () => PW && load(PW).catch(() => {}));
+setInterval(() => { if (PW && !document.hidden) load(PW).catch(() => {}); }, 3 * 60 * 1000);
+setInterval(() => { if (D) $('#upd').textContent = 'обновлено ' + ago(D.ts); }, 30000);
+
+/* ---------- pieces ---------- */
+function pill(l){ return `<span class="pill p-${l.st}">${esc(l.stn)}</span>`; }
+function card(l, extra=''){
+  const hot = l.opens > 0 && !['paid','rejected'].includes(l.st) ? ` <span class="hot">🔥 демо ×${l.opens}</span>` : '';
+  return `<button class="lead" data-id="${l.id}" type="button">
+    <div class="r1"><span class="t">${esc(l.title)}</span>${pill(l)}</div>
+    <div class="m">${esc(l.niche)}${l.city ? ' · ' + esc(l.city) : ''} · ${num(l.subs)} подп. · пост ${esc(l.act)}${hot}</div>
+    ${extra ? `<div class="m">${extra}</div>` : ''}</button>`;
+}
+function section(title, ids, extraFn, hint=''){
+  const ls = ids.map(i => BYID[i]).filter(Boolean);
+  return `<section class="sec"><h2>${title} <span>${ls.length}</span></h2>${hint ? `<div class="empty" style="padding-top:0">${hint}</div>` : ''}
+    ${ls.length ? `<div class="list">${ls.map(l => card(l, extraFn ? extraFn(l) : '')).join('')}</div>` : '<div class="empty">Пусто 👌</div>'}</section>`;
+}
+
+/* ---------- views ---------- */
+function vToday(){
+  const t = D.today;
+  const opened = D.leads.filter(l => l.opens > 0 && ['sent','read'].includes(l.st)).map(l => l.id);
+  const queue = D.outbox.length ? `<div class="list">${D.outbox.map(o => {
+      const l = BYID[o.id]; return l ? card(l, `${o.kind === 'offer' ? 'Первое сообщение' : o.kind === 'followup' ? 'Напоминание' : 'Ответ'} · уйдёт ${when(o.at)}`) : ''; }).join('')}</div>`
+    : '<div class="empty">Очередь пуста</div>';
+  return section('⚠️ Ждут моего ответа', t.waiting, l => 'написал ' + ago(l.in))
+    + section('🔥 Открыли демо, но молчат', opened, l => `открыл ${l.opens} раз · отправлено ${ago(l.sent)}`, 'Самое время написать им первым.')
+    + section('⏳ Просили написать позже — пора', t.reminders)
+    + section('🔔 Пора напомнить', t.followups, l => 'отправлено ' + ago(l.sent) + (l.st === 'read' ? ' · прочитали' : ''))
+    + section('👀 Прочитали и молчат', t.read_silent, l => 'прочитали ' + ago(l.read))
+    + `<section class="sec"><h2>📤 Очередь отправки <span>${D.outbox.length}</span></h2>${queue}</section>`
+    + section('📝 Готовые сообщения, которые давно лежат', t.forgotten, l => 'найден ' + ago(l.created));
+}
+const COLS = ['draft','queued','sent','read','replied','demo','paid','rejected'];
+function vBoard(){
+  return `<div class="board">${COLS.map(st => { const ls = D.leads.filter(l => l.st === st).sort((a,b) => (b.in||b.sent||b.prio) - (a.in||a.sent||a.prio));
+    return `<div class="col"><h3><span>${esc(({draft:'Оффер готов',queued:'В очереди',sent:'Отправлено',read:'Прочитано',replied:'Ответил',demo:'Демо',paid:'Оплатил',rejected:'Отказ'})[st])}</span><span>${ls.length}</span></h3>
+      <div class="list">${ls.slice(0, 60).map(l => card(l)).join('') || '<div class="empty">—</div>'}</div></div>`; }).join('')}</div>`;
+}
+function opts(values, cur, all){ return `<option value="">${all}</option>` + values.map(v => `<option ${v === cur ? 'selected' : ''}>${esc(v)}</option>`).join(''); }
+function vAll(){
+  const niches = [...new Set(D.leads.map(l => l.niche))].sort();
+  const sts = [...new Set(D.leads.map(l => l.stn))];
+  const acts = ['сегодня','на неделе','в этом месяце','давно','нет постов'];
+  let ls = D.leads.filter(l => {
+    if (F.q){ const q = F.q.toLowerCase(); if (![l.title, l.u, l.contact, l.what, l.city].join(' ').toLowerCase().includes(q)) return false; }
+    if (F.niche && l.niche !== F.niche) return false;
+    if (F.st && l.stn !== F.st) return false;
+    if (F.act && l.act !== F.act) return false;
+    if (F.contact === 'есть' && !l.contact) return false;
+    if (F.contact === 'нет' && l.contact) return false;
+    return true; });
+  const key = {prio: l => -l.prio, new: l => -l.created, subs: l => -l.subs, fit: l => -(l.fit ?? -1)}[F.sort];
+  ls.sort((a, b) => key(a) - key(b));
+  return `<div class="filters">
+      <input class="inp q" id="fq" placeholder="Поиск: название, @, город, что продают" value="${esc(F.q)}">
+      <select class="inp" id="fn">${opts(niches, F.niche, 'Все ниши')}</select>
+      <select class="inp" id="fs">${opts(sts, F.st, 'Все статусы')}</select>
+      <select class="inp" id="fa">${opts(acts, F.act, 'Любая активность')}</select>
+      <select class="inp" id="fc">${opts(['есть','нет'], F.contact, 'Контакт: любой')}</select>
+      <select class="inp" id="fo"><option value="prio" ${F.sort==='prio'?'selected':''}>Сначала важные</option><option value="new" ${F.sort==='new'?'selected':''}>Сначала новые</option><option value="subs" ${F.sort==='subs'?'selected':''}>По подписчикам</option><option value="fit" ${F.sort==='fit'?'selected':''}>По оценке ИИ</option></select>
+    </div><div class="empty" style="padding-top:0">Найдено: ${ls.length}</div>
+    <div class="list">${ls.slice(0, 300).map(l => card(l, `${esc(l.contact || 'без контакта')} · ${esc(l.bot)}${l.fit != null ? ' · ИИ ' + l.fit + '/10' : ''}`)).join('')}</div>`;
+}
+function vStats(){
+  const f = D.funnel, max = Math.max(1, ...Object.values(f));
+  const order = [['found','Найден'],['draft','Оффер готов'],['queued','В очереди'],['sent','Отправлено'],['read','Прочитано'],['replied','Ответил'],['demo','Демо'],['paid','Оплатил'],['rejected','Отказ'],['skipped','Не подходит'],['nocontact','Без контакта']];
+  const byNiche = {}; D.leads.forEach(l => { byNiche[l.niche] = byNiche[l.niche] || [0,0]; byNiche[l.niche][0]++; if (l.sent) byNiche[l.niche][1]++; });
+  return `<section class="sec"><h2>Воронка</h2><div class="bars">${order.map(([k, n]) => `<div class="bar"><span>${n}</span><div><i style="width:${(f[k]||0)/max*100}%"></i></div><b>${f[k]||0}</b></div>`).join('')}</div></section>
+    <section class="sec"><h2>Тексты: кто лучше работает</h2>${D.variants.length ? `<table><tr><th>Вариант</th><th>Отправлено</th><th>Ответили</th><th>%</th></tr>${D.variants.map(v => `<tr><td>${esc(v.v)}</td><td>${v.sent}</td><td>${v.replied||0}</td><td>${v.sent ? Math.round(100*(v.replied||0)/v.sent) : 0}%</td></tr>`).join('')}</table>` : '<div class="empty">Пока нет отправок</div>'}</section>
+    <section class="sec"><h2>Ниши</h2><table><tr><th>Ниша</th><th>В базе</th><th>Писали</th></tr>${Object.entries(byNiche).sort((a,b) => b[1][0]-a[1][0]).map(([n, v]) => `<tr><td>${esc(n)}</td><td>${v[0]}</td><td>${v[1]}</td></tr>`).join('')}</table></section>
+    <section class="sec"><h2>🧠 Чему научился бот</h2><div class="learn">${esc(D.learn)}</div></section>`;
+}
+
+/* ---------- drawer ---------- */
+function openLead(id){
+  const l = BYID[id]; if (!l) return;
+  const msgs = (D.msgs[String(id)] || []);
+  const bot = D.bot ? `https://t.me/${D.bot}?start=lead_${id}` : null;
+  const chat = l.contact && l.contact.startsWith('@') ? `https://t.me/${l.contact.slice(1)}` : null;
+  $('#drawer').innerHTML = `<button class="btn ghost sm close" id="dclose" type="button">Закрыть</button>
+    <h2>${esc(l.title)}</h2><div>${pill(l)} ${l.rc ? `<span class="pill">${esc(l.rc)}</span>` : ''} ${l.opens ? `<span class="pill hot">🔥 демо ×${l.opens}</span>` : ''}</div>
+    <div class="acts">
+      ${bot ? `<a class="btn sm" href="${bot}" target="_blank" rel="noopener">Открыть в боте</a>` : ''}
+      ${chat ? `<a class="btn ghost sm" href="${chat}" target="_blank" rel="noopener">Чат ${esc(l.contact)}</a>` : ''}
+      ${l.u ? `<a class="btn ghost sm" href="https://t.me/${esc(l.u)}" target="_blank" rel="noopener">Канал</a>` : ''}
+      ${l.demo_url ? `<a class="btn ghost sm" href="${esc(l.demo_url)}${l.demo_url.includes('?') ? '&' : '?'}preview=1" target="_blank" rel="noopener">Демо</a>` : ''}
+    </div>
+    <div class="grid2">
+      <div><span>Ниша:</span> ${esc(l.niche)}${l.city ? ', ' + esc(l.city) : ''}</div><div><span>Подписчики:</span> ${num(l.subs)}</div>
+      <div><span>Контакт:</span> ${esc(l.contact || '—')}</div><div><span>Пост:</span> ${esc(l.act)}</div>
+      <div><span>Боты:</span> ${esc(l.bot)}</div><div><span>Оценка ИИ:</span> ${l.fit ?? '—'}/10</div>
+      <div><span>Найден:</span> ${when(l.created)}</div><div><span>Отправлено:</span> ${when(l.sent)}</div>
+      <div><span>Прочитано:</span> ${when(l.read)}</div><div><span>Ответил:</span> ${when(l.replied)}</div>
+      <div><span>Цена:</span> ${l.price ? num(l.price[0]) + ' ₽ + ' + num(l.price[1]) + ' ₽/мес' : '—'}</div>
+      <div><span>Подписан на канал:</span> ${l.joined ? when(l.joined) : 'нет'}</div>
+      <div><span>Папка:</span> ${esc(l.folder || '—')}</div><div><span>Нашёл по слову:</span> ${esc(l.kw || '—')}</div>
+    </div>
+    ${l.what || l.why ? `<div class="box"><small>Что за бизнес</small>${esc(l.what)}${l.why ? '\n' + esc(l.why) : ''}${l.pains.length ? '\nБоли: ' + esc(l.pains.join('; ')) : ''}</div>` : ''}
+    ${l.signals.length ? `<div class="box"><small>Почему в списке</small>${esc(l.signals.join('\n'))}</div>` : ''}
+    <h3 style="margin:16px 0 6px;font-size:15px">Переписка</h3>
+    ${msgs.length ? `<div class="chat">${msgs.map(([d, t, ts]) => `<div class="msg ${d}">${esc(t)}<time>${when(ts)}</time></div>`).join('')}</div>`
+      : l.offer ? `<div class="box"><small>Подготовленное сообщение (ещё не отправлено)</small>${esc(l.offer)}</div>` : '<div class="empty">Ещё не писали</div>'}
+    ${l.note ? `<div class="box"><small>Заметка</small>${esc(l.note)}</div>` : ''}`;
+  $('#scrim').classList.add('on'); $('#drawer').classList.add('on');
+  $('#dclose').addEventListener('click', closeLead);
+}
+function closeLead(){ $('#scrim').classList.remove('on'); $('#drawer').classList.remove('on'); }
+$('#scrim').addEventListener('click', closeLead);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLead(); });
+
+/* ---------- render ---------- */
+function render(){
+  $('#upd').textContent = 'обновлено ' + ago(D.ts) + (D.paused ? ' · ⏸ отправка на паузе' : '');
+  const r = D.rates;
+  $('#kpis').innerHTML = `
+    <div class="kpi"><small>Отправлено за сутки</small><b>${D.sent24}</b><i>из ${D.limit}</i></div>
+    <div class="kpi"><small>Ответили</small><b>${r.replied}</b><i>из ${r.sent}${r.sent ? ' · ' + Math.round(100*r.replied/r.sent) + '%' : ''}</i></div>
+    <div class="kpi"><small>Открыли демо</small><b>${r.demo_opened}</b></div>
+    <div class="kpi"><small>Оплатили</small><b>${r.paid}</b></div>`;
+  const waiting = D.today.waiting.length;
+  const tabs = [['today','Сегодня', waiting], ['board','Воронка'], ['all','Все магазины'], ['stats','Аналитика']];
+  $('#tabs').innerHTML = tabs.map(([k, n, c]) => `<button class="tab ${TAB === k ? 'on' : ''}" data-tab="${k}" type="button">${n}${c ? `<em>${c}</em>` : ''}</button>`).join('');
+  $('#view').innerHTML = TAB === 'today' ? vToday() : TAB === 'board' ? vBoard() : TAB === 'all' ? vAll() : vStats();
+  if (TAB === 'all') bindFilters();
+}
+function bindFilters(){
+  const map = {fq:'q', fn:'niche', fs:'st', fa:'act', fc:'contact', fo:'sort'};
+  for (const [id, k] of Object.entries(map)){
+    const el = document.getElementById(id);
+    el.addEventListener(id === 'fq' ? 'input' : 'change', () => { F[k] = el.value;
+      const pos = el.selectionStart; render(); if (id === 'fq'){ const n = document.getElementById('fq'); n.focus(); n.setSelectionRange(pos, pos); } });
+  }
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab]'); if (t){ TAB = t.dataset.tab; render(); window.scrollTo({top:0}); return; }
+  const l = e.target.closest('.lead[data-id]'); if (l) openLead(+l.dataset.id);
+});
+
+/* ---------- start ---------- */
+let saved = null; try { saved = localStorage.getItem(KEY); } catch (e) {}
+if (saved) tryLogin(saved, true); else $('#login').hidden = false;
+})();
+</script>
+</body>
+</html>
