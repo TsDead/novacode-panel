@@ -95,6 +95,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:7px 6px;b
 th{color:var(--muted);font-weight:600}
 .learn{white-space:pre-wrap;color:var(--muted);font-size:14px}
 @media (max-width:760px){
+  .top h1{font-size:18px;flex-basis:100%}
   .kpis{grid-template-columns:repeat(2,1fr)}
   .filters{grid-template-columns:1fr 1fr}
   .filters .q{grid-column:1/-1}
@@ -290,7 +291,7 @@ function openLead(id){
     ${l.signals.length ? `<div class="box"><small>Почему в списке</small>${esc(l.signals.join('\n'))}</div>` : ''}
     <h3 style="margin:16px 0 6px;font-size:15px">Переписка</h3>
     ${msgs.length ? `<div class="chat">${msgs.map(([d, t, ts]) => `<div class="msg ${d}">${esc(t)}<time>${when(ts)}</time></div>`).join('')}</div>`
-      : l.offer ? `<div class="box"><small>Подготовленное сообщение (ещё не отправлено)</small>${esc(l.offer)}</div>` : '<div class="empty">Ещё не писали</div>'}
+      : l.offer ? `<div class="box"><small>${l.sent ? 'Отправленное сообщение' : 'Подготовленное сообщение (ещё не отправлено)'}</small>${esc(l.offer)}</div>` : '<div class="empty">Ещё не писали</div>'}
     ${l.note ? `<div class="box"><small>Заметка</small>${esc(l.note)}</div>` : ''}`;
   $('#scrim').classList.add('on'); $('#drawer').classList.add('on');
   $('#dclose').addEventListener('click', closeLead);
